@@ -14,7 +14,13 @@ export default function StackRouter() {
           headerShown: false,
         }}
       />
-      <Screen name="content" component={ContentView} />
+      <Screen
+        name="content"
+        component={ContentView}
+        options={{
+          headerTitle: "",
+        }}
+      />
     </Navigator>
   );
 }

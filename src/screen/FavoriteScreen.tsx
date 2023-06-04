@@ -5,12 +5,23 @@ import { SafeAreaView, View, Text } from "react-native";
 import { get_content_slug } from "../../services/AxiosRequest";
 import { getFavorites } from "../../services/storage";
 import { CardContent } from "../components/CardContent";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { ContentState, setLoading } from "../../store/slice/Content.slice";
 
 export const Favorite = () => {
   const [content, setContent] = useState<any>([]);
+  const loading = useSelector((state: RootState) => state.content.loading);
+  const dispatch = useDispatch();
   const handleFavorite = async () => {};
 
-  useEffect(() => {}, [content]);
+  useEffect(() => {
+    dispatch(setLoading(true));
+    getFavorites().then((res) => {
+      setContent(res);
+      dispatch(setLoading(false));
+    });
+  }, []);
 
   return (
     <View
@@ -37,12 +48,12 @@ export const Favorite = () => {
             ) : (
               <View style={{ padding: 15 }}>
                 {content[0]?.id ? (
-                  content?.map((item: ContentProps, index: number) => (
+                  content?.map((item: ContentState, index: number) => (
                     <CardContent item={item} key={index} />
                   ))
                 ) : (
                   <View>
-                    <Text>{error?.message}</Text>
+                    <Text>Pasta vazia</Text>
                   </View>
                 )}
               </View>

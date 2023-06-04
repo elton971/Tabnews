@@ -1,7 +1,6 @@
 import { TouchableOpacity, View, Text } from "react-native";
 import moment from "moment";
-import { Button } from "react-native-paper";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getFavorite,
   removeFavorite,

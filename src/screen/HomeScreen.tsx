@@ -53,7 +53,7 @@ export const HomeScreen = () => {
                   <CardContent item={item} key={index} />
                 ))
               ) : (
-                <View>{/* <Text>{error?.message}</Text> */}</View>
+                <View>Nao temos nada aqui</View>
               )}
 
               {/* {loading_more ? (
