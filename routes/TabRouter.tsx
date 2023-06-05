@@ -3,6 +3,7 @@ import { HomeScreen } from "../src/screen/HomeScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Favorite } from "../src/screen/FavoriteScreen";
 import { Feather, Ionicons, MaterialIcons, Entypo } from "@expo/vector-icons";
+import ConfigScreen from "../src/screen/ConfigScreen";
 
 export default function TabRouter() {
   const Stack = createBottomTabNavigator();
@@ -56,7 +57,7 @@ export default function TabRouter() {
       />
       <Stack.Screen
         name="Configurações"
-        component={Favorite}
+        component={ConfigScreen}
         options={{
           headerShown: false,
           tabBarIcon({ focused }) {

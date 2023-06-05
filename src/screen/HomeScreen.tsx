@@ -1,4 +1,4 @@
-import { View, SafeAreaView, ScrollView, Text } from "react-native";
+import { View, SafeAreaView, ScrollView, Text, Image } from "react-native";
 import { useEffect } from "react";
 import { ActivityIndicator } from "react-native-paper";
 import { CardContent } from "../components/CardContent";
@@ -15,20 +15,21 @@ export const HomeScreen = () => {
   const handleScroll = (event: any) => {};
 
   useEffect(() => {
-    if (content.length == 0) {
-      get_content(1).then((response) => {
+    get_content(1)
+      .then((response) => {
         dispatch(setLoading(true));
         dispatch(setContent(response));
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    }
-    return;
   }, []);
 
   return (
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: "#f2f2f0",
+        backgroundColor: "#fff",
       }}
     >
       <ScrollView onScroll={handleScroll} scrollEventThrottle={16}>
@@ -48,12 +49,27 @@ export const HomeScreen = () => {
             </View>
           ) : (
             <View style={{ paddingHorizontal: 15 }}>
-              {content.length > 0 ? (
+              {content && content.length !== 0 ? (
                 content?.map((item, index: number) => (
                   <CardContent item={item} key={index} />
                 ))
               ) : (
-                <View>Nao temos nada aqui</View>
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "50%",
+                  }}
+                >
+                  <Image
+                    source={require("../../assets/error.jpg")}
+                    resizeMode="contain"
+                    style={{
+                      width: "100%",
+                      height: 300,
+                    }}
+                  />
+                </View>
               )}
 
               {/* {loading_more ? (

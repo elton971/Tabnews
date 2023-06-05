@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   StyleSheet,
+  Image,
 } from "react-native";
 import {
   get_content_comment,
@@ -12,21 +13,13 @@ import {
 } from "../../services/AxiosRequest";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { ScrollView, State } from "react-native-gesture-handler";
-import MarkdownDisplay from "react-native-markdown-display";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../store/slice/Content.slice";
 import { RootState } from "../../store/store";
 import { ActivityIndicator } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
-
-export const MarkdownContent = ({ markdownText }: { markdownText: string }) => {
-  return (
-    <Text style={{ padding: 10 }}>
-      {/* @ts-ignore */}
-      <MarkdownDisplay style={{}}>{markdownText}</MarkdownDisplay>
-    </Text>
-  );
-};
+import { Comment } from "./Comment";
+import { MarkdownContent } from "./MarkdownContent";
 
 export default function ContentView() {
   const [content, setContent] = useState({} as any);
@@ -38,6 +31,12 @@ export default function ContentView() {
   const navigation = useNavigation();
 
   useEffect(() => {
+    dispatch(setLoading(true));
+    getContent();
+    getComment();
+    setNavigaiton();
+  }, []);
+  const setNavigaiton = () => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity>
@@ -45,22 +44,27 @@ export default function ContentView() {
         </TouchableOpacity>
       ),
     });
-    dispatch(setLoading(true));
+  };
+
+  const getContent = () => {
     get_content_slug(item.slug, item.owner_username).then((response) => {
       setContent(response);
       dispatch(setLoading(false));
     });
+  };
+  const getComment = () => {
     if (item.children_deep_count > 0) {
       get_content_comment(item.slug, item.owner_username).then((response) => {
         setComment(response);
       });
     }
-  }, []);
+  };
 
   return (
     <SafeAreaView
       style={{
         flex: 1,
+        backgroundColor: "#fff",
       }}
     >
       <ScrollView
@@ -78,7 +82,7 @@ export default function ContentView() {
           >
             <ActivityIndicator color="#e0e0e0" size={50} />
           </View>
-        ) : (
+        ) : content && content.length !== 0 ? (
           <View
             style={{
               paddingHorizontal: 20,
@@ -122,48 +126,35 @@ export default function ContentView() {
                     {coment.length > 0 && "Comentarios"}
                   </Text>
                   {coment.length > 0 &&
-                    coment.map((coment: any) => {
+                    coment.map((comment: any) => {
                       return (
-                        <View
-                          style={{
-                            marginLeft: 20,
-                            padding: 10,
-                            borderLeftColor: "#cfd3d4",
-                            borderLeftWidth: 1,
-                          }}
-                        >
-                          <View
-                            style={{
-                              backgroundColor: "#09a5de",
-                              width: 100,
-                              borderRadius: 5,
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                          >
-                            <Text
-                              style={{
-                                color: "#05739c",
-                                padding: 2,
-                              }}
-                            >
-                              {coment.owner_username}
-                            </Text>
-                          </View>
-                          <View
-                            style={{
-                              borderBottomColor: "gray",
-                              borderBottomWidth: 2,
-                            }}
-                          >
-                            <MarkdownContent markdownText={coment.body} />
-                          </View>
-                        </View>
+                        <Comment
+                          key={comment.id}
+                          comment={comment}
+                          onReply={() => {}}
+                        />
                       );
                     })}
                 </View>
               </View>
             </View>
+          </View>
+        ) : (
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "50%",
+            }}
+          >
+            <Image
+              source={require("../../assets/error.jpg")}
+              resizeMode="contain"
+              style={{
+                width: "100%",
+                height: 300,
+              }}
+            />
           </View>
         )}
       </ScrollView>
