@@ -1,18 +1,22 @@
 import React from "react";
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  MaterialCommunityIcons,
+  MaterialIcons,
+  FontAwesome,
+} from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ConfigScreen() {
+  const navigation = useNavigation();
   const configOptions = [
     {
       name: "Publicar conteudo",
-      icon: (
-        <MaterialCommunityIcons
-          name="content-save-outline"
-          size={24}
-          color="black"
-        />
-      ),
+      icon: <MaterialIcons name="article" size={24} color="black" />,
+      onPress: () => {
+        console.log("deslogar");
+      },
     },
     {
       name: "Meus conteudos",
@@ -23,20 +27,21 @@ export default function ConfigScreen() {
           color="black"
         />
       ),
+      onPress: () => {
+        console.log("deslogar");
+      },
     },
     {
-      name: "Meus conteudos",
-      icon: (
-        <MaterialCommunityIcons
-          name="content-save-outline"
-          size={24}
-          color="black"
-        />
-      ),
+      name: "Editar perfil",
+      icon: <FontAwesome name="user-o" size={24} color="black" />,
     },
     {
       name: "Deslogar",
       icon: <MaterialCommunityIcons name="logout" size={24} color="black" />,
+      onPress: () => {
+        // @ts-ignore
+        navigation.navigate("loginAuth");
+      },
     },
   ];
   return (
@@ -87,6 +92,7 @@ export default function ConfigScreen() {
                   marginVertical: 5,
                   paddingHorizontal: 20,
                 }}
+                onPress={item.onPress}
               >
                 <View
                   style={{

@@ -20,25 +20,25 @@ export const CardContent = ({ item }: Props) => {
   const [fav, setFav] = useState(false);
 
   const navigation = useNavigation();
-  const handleFavorite = () => {
-    if (fav) {
-      removeFavorite(item.id).then((response) => {
-        setFav(false);
-      });
-    } else {
-      saveFavorite(item.owner_username, item.slug, item.id).then((response) => {
-        setFav(true);
-      });
-    }
-  };
+  // const handleFavorite = () => {
+  //   if (fav) {
+  //     removeFavorite(item.id).then((response) => {
+  //       setFav(false);
+  //     });
+  //   } else {
+  //     saveFavorite(item.owner_username, item.slug, item.id).then((response) => {
+  //       setFav(true);
+  //     });
+  //   }
+  // };
 
-  useEffect(() => {
-    getFavorite(item.owner_username, item.slug, item.id).then((response) => {
-      if (response) {
-        setFav(response);
-      }
-    });
-  });
+  // useEffect(() => {
+  //   getFavorite(item.owner_username, item.slug, item.id).then((response) => {
+  //     if (response) {
+  //       setFav(response);
+  //     }
+  //   });
+  // });
 
   return (
     <TouchableOpacity

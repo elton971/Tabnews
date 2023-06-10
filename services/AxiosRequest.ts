@@ -1,11 +1,20 @@
 import axios from "axios";
 
-const BASE_URL = "https://www.tabnews.com.br/api/v1/";
+export const BASE_URL = "https://www.tabnews.com.br/api/v1/";
 
-export const get_content = async (page: number, strategy = "new") => {
+export const get_content = async (
+  page: number,
+  token = "",
+  strategy = "new"
+) => {
   try {
     const response = await axios.get(
-      BASE_URL + `contents?page=${page}&strategy=${strategy}`
+      BASE_URL + `contents?page=${page}&strategy=${strategy}`,
+      {
+        headers: {
+          Cookie: `session_id=${token}`,
+        },
+      }
     );
     return response.data;
   } catch (error) {

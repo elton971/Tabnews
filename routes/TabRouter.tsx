@@ -14,7 +14,6 @@ export default function TabRouter() {
           backgroundColor: "#fff",
           borderTopColor: "transparent",
         },
-
         headerTitleAlign: "left",
         headerStyle: {
           backgroundColor: "#fff",

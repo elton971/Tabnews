@@ -69,3 +69,20 @@ export const getFavorite = async (
     console.error(error);
   }
 };
+
+export const saveAuthUserCredential = async (data: any) => {
+  try {
+    await AsyncStorage.setItem("@AuthUserCredential", JSON.stringify(data));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getAuthUserCredential = async () => {
+  try {
+    const auth = await AsyncStorage.getItem("@AuthUserCredential");
+    return auth ? JSON.parse(auth) : null;
+  } catch (error) {
+    console.error(error);
+  }
+};

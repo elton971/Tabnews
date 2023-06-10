@@ -24,7 +24,6 @@ export const Comment = ({ comment, onReply }: CommentProps) => {
     if (comment.children_deep_count > 0) {
       get_content_comment(comment.slug, comment.owner_username).then(
         (response) => {
-          console.log(response);
           setCommentChild(response);
         }
       );
@@ -39,6 +38,7 @@ export const Comment = ({ comment, onReply }: CommentProps) => {
           padding: 10,
           borderLeftColor: "#cfd3d4",
           borderLeftWidth: 1,
+          borderBottomStartRadius: 10,
         }}
       >
         <View

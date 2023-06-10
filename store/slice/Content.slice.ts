@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { on } from "events";
 export interface ContentState {
   id: string;
   owner_id: string;
@@ -15,15 +16,24 @@ export interface ContentState {
   owner_username: string;
   children_deep_count: number;
 }
+interface InfoState {
+  message: string;
+  visible: boolean;
+}
 
 interface initialStateProps {
   content: ContentState[];
   loading: Boolean;
+  infoModal: InfoState;
 }
 
 const initialState: initialStateProps = {
   content: [],
   loading: false,
+  infoModal: {
+    message: "",
+    visible: false,
+  },
 };
 
 const contentSlice = createSlice({
@@ -37,8 +47,12 @@ const contentSlice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
+    setProblem: (state, action) => {
+      state.infoModal = action.payload;
+      console.log(state.infoModal);
+    },
   },
 });
 
-export const { setContent, setLoading } = contentSlice.actions;
+export const { setContent, setLoading, setProblem } = contentSlice.actions;
 export default contentSlice.reducer;

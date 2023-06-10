@@ -27,16 +27,16 @@ export default function ContentView() {
   const { item } = route.params;
   const dispatch = useDispatch();
   const loading = useSelector((state: RootState) => state.content.loading);
-  const [coment, setComment] = useState([]);
+  const [comment, setComment] = useState([]);
   const navigation = useNavigation();
 
   useEffect(() => {
     dispatch(setLoading(true));
     getContent();
     getComment();
-    setNavigaiton();
-  }, []);
-  const setNavigaiton = () => {
+    setNavigation();
+  }, [content]);
+  const setNavigation = () => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity>
@@ -123,10 +123,10 @@ export default function ContentView() {
                       paddingVertical: 10,
                     }}
                   >
-                    {coment.length > 0 && "Comentarios"}
+                    {comment.length > 0 && "Comentarios"}
                   </Text>
-                  {coment.length > 0 &&
-                    coment.map((comment: any) => {
+                  {comment.length > 0 &&
+                    comment.map((comment: any) => {
                       return (
                         <Comment
                           key={comment.id}
