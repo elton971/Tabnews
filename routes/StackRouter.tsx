@@ -1,12 +1,10 @@
 import * as React from "react";
-import {
-  createNativeStackNavigator,
-  CardStyleInterpolators,
-} from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabRouter from "./TabRouter";
 import ContentView from "../src/components/ContentView";
 import LoginScreen from "../src/screen/LoginScreen";
 import { Easing } from "react-native";
+import RegisterScreen from "../src/screen/RegisterScreen";
 
 export default function StackRouter() {
   const { Screen, Navigator } = createNativeStackNavigator();
@@ -53,8 +51,15 @@ export default function StackRouter() {
         }}
       />
       <Screen
-        name="loginAuth"
+        name="login"
         component={LoginScreen}
+        options={{
+          headerTitle: "",
+        }}
+      />
+      <Screen
+        name="register"
+        component={RegisterScreen}
         options={{
           headerTitle: "",
         }}

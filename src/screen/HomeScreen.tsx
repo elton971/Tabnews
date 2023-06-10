@@ -1,4 +1,4 @@
-import { View, SafeAreaView, ScrollView, Text, Image } from "react-native";
+import { View, SafeAreaView, ScrollView, Image } from "react-native";
 import { useEffect, useMemo } from "react";
 import { ActivityIndicator } from "react-native-paper";
 import { CardContent } from "../components/CardContent";

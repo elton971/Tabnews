@@ -48,11 +48,13 @@ const contentSlice = createSlice({
       state.loading = action.payload;
     },
     setProblem: (state, action) => {
-      state.infoModal = action.payload;
-      console.log(state.infoModal);
+      state.infoModal = {...action.payload};
+    },
+    setProblemClose: (state, action) => {
+      state.infoModal.visible = action.payload;
     },
   },
 });
 
-export const { setContent, setLoading, setProblem } = contentSlice.actions;
+export const { setContent, setLoading, setProblem,setProblemClose } = contentSlice.actions;
 export default contentSlice.reducer;

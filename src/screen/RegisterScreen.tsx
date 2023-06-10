@@ -8,9 +8,15 @@ import {
 } from "react-native";
 import { Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
+import InfoModal from "../components/modal/InfoModal";
+import { login } from "../../services/auth";
+import { saveAuthUserCredential } from "../../services/storage";
+import { setProblem } from "../../store/slice/Content.slice";
+import { useDispatch } from "react-redux";
 
 export default function RegisterScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => {
@@ -36,14 +42,25 @@ export default function RegisterScreen() {
     {
       name: "email",
       placeholder: "Email",
-      type: "password",
+      type: "text",
+    },
+    {
+      name: "userName",
+      placeholder: "UserName",
+      type: "text",
     },
     {
       name: "password",
       placeholder: "Senha",
       type: "password",
     },
+    {
+      name: "confirm_password",
+      placeholder: "Confirma a Senha",
+      type: "password",
+    },
   ];
+
   return (
     <SafeAreaView
       style={{
@@ -57,8 +74,22 @@ export default function RegisterScreen() {
         }}
       >
         <Formik
-          initialValues={{ email: "", password: "" }}
-          onSubmit={(values) => console.log(values)}
+          initialValues={{
+            email: "",
+            password: "",
+            userName: "",
+            confirm_password: "",
+          }}
+          onSubmit={(values) => {
+            login(values.email, values.password)
+              .then((res) => {
+                console.log("logado", res);
+                saveAuthUserCredential(res);
+              })
+              .catch((error) => {
+                dispatch(setProblem({ visible: true, message: error.message }));
+              });
+          }}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <View
@@ -76,7 +107,7 @@ export default function RegisterScreen() {
                   fontWeight: "bold",
                 }}
               >
-                Login
+                Cadastro
               </Text>
               {textInputValue.map((item) => {
                 return (
@@ -92,11 +123,25 @@ export default function RegisterScreen() {
                     key={item.name}
                     onChangeText={handleChange(item.name)}
                     onBlur={handleBlur(item.name)}
-                    value={
-                      item.name === "email" ? values.email : values.password
-                    }
+                    //@ts-ignore
+                    value={() => {
+                      if (item.name === "email") {
+                        return values.email;
+                      } else if (item.name === "password") {
+                        return values.password;
+                      } else if (item.name === "userName") {
+                        return values.userName;
+                      } else {
+                        return values.confirm_password;
+                      }
+                    }}
                     placeholder={item.placeholder}
-                    secureTextEntry={item.name === "email" ? false : true}
+                    secureTextEntry={
+                      item.name === "password" ||
+                      item.name === "confirm_password"
+                        ? true
+                        : false
+                    }
                   />
                 );
               })}
@@ -125,36 +170,6 @@ export default function RegisterScreen() {
                       color: "#fff",
                     }}
                   >
-                    Login
-                  </Text>
-                </TouchableOpacity>
-                <Text
-                  style={{
-                    textAlign: "center",
-                    color: "#025e6e",
-                  }}
-                >
-                  Para caso de nao ter a conta, clica em:
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    height: 40,
-                    borderRadius: 10,
-                    justifyContent: "center",
-                    backgroundColor: "#e6eef0",
-                  }}
-                  onPress={() => {
-                    handleSubmit();
-                  }}
-                >
-                  <Text
-                    style={{
-                      textAlign: "center",
-                      fontSize: 20,
-                      color: "#000",
-                      fontWeight: "700",
-                    }}
-                  >
                     Cadastrar
                   </Text>
                 </TouchableOpacity>
@@ -162,6 +177,7 @@ export default function RegisterScreen() {
             </View>
           )}
         </Formik>
+        <InfoModal />
       </View>
     </SafeAreaView>
   );

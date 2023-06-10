@@ -1,18 +1,25 @@
-import { View, Text, Modal } from "react-native";
+import { View, Text, Modal, Image, TouchableOpacity } from "react-native";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import styled from "styled-components/native";
+import { setProblemClose } from "../../../store/slice/Content.slice";
 
 const InfoModal = () => {
-  const { visible, message } = useSelector(
-    (state: RootState) => state.content.infoModal
+  const dispatch = useDispatch();
+  const visible = useSelector(
+    (state: RootState) => state.content.infoModal.visible
   );
+
+  const message = useSelector(
+    (state: RootState) => state.content.infoModal.message
+  );
+
   return (
     <>
       <Modal
         visible={visible}
-        animationType="fade"
+        animationType="slide"
         transparent
         hardwareAccelerated
         statusBarTranslucent
@@ -20,7 +27,38 @@ const InfoModal = () => {
         <Background>
           <Row>
             <Container style={{ elevation: 2 }}>
-              <Text>{message}</Text>
+              <View
+                style={{
+                  height: 300,
+                }}
+              >
+                <View>
+                  <Image
+                    source={require("../../../assets/error.jpg")}
+                    resizeMode="contain"
+                    style={{ width: "100%", height: 200 }}
+                  />
+                </View>
+                <Text style={{ textAlign: "center", fontSize: 30 }}>Ops</Text>
+                <Text>{message}</Text>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "red",
+                    padding: 10,
+                    marginTop: 10,
+                    borderRadius: 10,
+                  }}
+                  onPress={() => {
+                    dispatch(setProblemClose(false));
+                  }}
+                >
+                  <Text
+                    style={{ textAlign: "center", fontSize: 30, color: "#fff" }}
+                  >
+                    Fechar
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </Container>
           </Row>
         </Background>

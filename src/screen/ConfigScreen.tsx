@@ -40,7 +40,7 @@ export default function ConfigScreen() {
       icon: <MaterialCommunityIcons name="logout" size={24} color="black" />,
       onPress: () => {
         // @ts-ignore
-        navigation.navigate("loginAuth");
+        navigation.navigate("login");
       },
     },
   ];

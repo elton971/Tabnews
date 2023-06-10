@@ -12,6 +12,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { login } from "../../services/auth";
 import { useDispatch } from "react-redux";
 import { saveAuthUserCredential } from "../../services/storage";
+import InfoModal from "../components/modal/InfoModal";
+import { setProblem } from "../../store/slice/Content.slice";
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
@@ -51,9 +53,6 @@ export default function LoginScreen() {
       type: "password",
     },
   ];
-  function setInfoModal(arg0: boolean, message: any): any {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <SafeAreaView
@@ -76,7 +75,7 @@ export default function LoginScreen() {
                 saveAuthUserCredential(res);
               })
               .catch((error) => {
-                dispatch(setInfoModal(true, error.message));
+                dispatch(setProblem({ visible: true, message: error.message }));
               });
           }}
         >
@@ -164,7 +163,8 @@ export default function LoginScreen() {
                     backgroundColor: "#e6eef0",
                   }}
                   onPress={() => {
-                    handleSubmit();
+                    // @ts-ignore
+                    navigation.navigate("register");
                   }}
                 >
                   <Text
@@ -178,6 +178,7 @@ export default function LoginScreen() {
                     Cadastrar
                   </Text>
                 </TouchableOpacity>
+                <InfoModal />
               </View>
             </View>
           )}
