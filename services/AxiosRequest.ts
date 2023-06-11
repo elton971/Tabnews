@@ -8,7 +8,8 @@ export const get_content = async (
   strategy = "new"
 ) => {
   try {
-    const response = await axios.get(
+    console.log(token)
+    const response = await axios.post(
       BASE_URL + `contents?page=${page}&strategy=${strategy}`,
       {
         headers: {
@@ -18,7 +19,7 @@ export const get_content = async (
     );
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.error("err",error);
   }
 };
 

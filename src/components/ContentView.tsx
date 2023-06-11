@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import {
   get_content_slug,
 } from "../../services/AxiosRequest";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { ScrollView, State } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../store/slice/Content.slice";
 import { RootState } from "../../store/store";
@@ -35,7 +35,7 @@ export default function ContentView() {
     getContent();
     getComment();
     setNavigation();
-  }, [content]);
+  },[]);
   const setNavigation = () => {
     navigation.setOptions({
       headerRight: () => (
@@ -60,6 +60,103 @@ export default function ContentView() {
     }
   };
 
+
+  const RenderContent = useMemo(()=>{
+    return(
+        <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            style={{ height: "100%" }}
+        >
+          {loading ? (
+              <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    marginTop: "50%",
+                  }}
+              >
+                <ActivityIndicator color="#e0e0e0" size={50} />
+              </View>
+          ) : content && content.length !== 0 ? (
+              <View
+                  style={{
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                  }}
+              >
+                <View>
+                  <View>
+                    <Text
+                        style={{
+                          fontSize: 25,
+                          fontWeight: "bold",
+                          marginBottom: 10,
+                        }}
+                    >
+                      {content.title}
+                    </Text>
+                  </View>
+                  <View>
+                    <View>
+                      <View>
+                        <MarkdownContent markdownText={content.body} />
+                      </View>
+                      <View>
+                        <View style={styles.commentContainer}>
+                          <TouchableOpacity style={styles.replyButton}>
+                            <Text>Responder</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                    <View>
+                      <Text
+                          style={{
+                            color: "#000",
+                            fontSize: 20,
+                            fontWeight: "bold",
+                            paddingVertical: 10,
+                          }}
+                      >
+                        {comment.length > 0 && "Comentarios"}
+                      </Text>
+                      {comment.length > 0 &&
+                          comment.map((comment: any) => {
+                            return (
+                                <Comment
+                                    key={comment.id}
+                                    comment={comment}
+                                    onReply={() => {}}
+                                />
+                            );
+                          })}
+                    </View>
+                  </View>
+                </View>
+              </View>
+          ) : (
+              <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "50%",
+                  }}
+              >
+                <Image
+                    source={require("../../assets/error.jpg")}
+                    resizeMode="contain"
+                    style={{
+                      width: "100%",
+                      height: 300,
+                    }}
+                />
+              </View>
+          )}
+        </ScrollView>
+    )
+  },[content])
+
   return (
     <SafeAreaView
       style={{
@@ -67,97 +164,7 @@ export default function ContentView() {
         backgroundColor: "#fff",
       }}
     >
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={{ height: "100%" }}
-      >
-        {loading ? (
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-              marginTop: "50%",
-            }}
-          >
-            <ActivityIndicator color="#e0e0e0" size={50} />
-          </View>
-        ) : content && content.length !== 0 ? (
-          <View
-            style={{
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-            }}
-          >
-            <View>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 25,
-                    fontWeight: "bold",
-                    marginBottom: 10,
-                  }}
-                >
-                  {content.title}
-                </Text>
-              </View>
-              <View>
-                <View>
-                  <View>
-                    <MarkdownContent markdownText={content.body} />
-                  </View>
-                  <View>
-                    <View style={styles.commentContainer}>
-                      <TouchableOpacity style={styles.replyButton}>
-                        <Text>Responder</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-                <View>
-                  <Text
-                    style={{
-                      color: "#000",
-                      fontSize: 20,
-                      fontWeight: "bold",
-                      paddingVertical: 10,
-                    }}
-                  >
-                    {comment.length > 0 && "Comentarios"}
-                  </Text>
-                  {comment.length > 0 &&
-                    comment.map((comment: any) => {
-                      return (
-                        <Comment
-                          key={comment.id}
-                          comment={comment}
-                          onReply={() => {}}
-                        />
-                      );
-                    })}
-                </View>
-              </View>
-            </View>
-          </View>
-        ) : (
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: "50%",
-            }}
-          >
-            <Image
-              source={require("../../assets/error.jpg")}
-              resizeMode="contain"
-              style={{
-                width: "100%",
-                height: 300,
-              }}
-            />
-          </View>
-        )}
-      </ScrollView>
+      {RenderContent}
     </SafeAreaView>
   );
 }
